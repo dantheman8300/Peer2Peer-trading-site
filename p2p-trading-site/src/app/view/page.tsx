@@ -10,7 +10,7 @@ export default function page() {
   return (
     <div className="h-screen flex flex-col">
       <Header />
-      <div className="flex flex-grow">
+      <div className="">
         <OfferGrid />
       </div>
       
