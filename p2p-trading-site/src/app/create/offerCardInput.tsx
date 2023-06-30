@@ -41,6 +41,12 @@ export default function OfferCard(
 
   const handleUnitSelect = (event: any) => {
     console.log(event.target.value)
+
+    // reset amounts to 00 directly with their elements
+    const aptAmountElement = document.getElementById("amount1") as HTMLInputElement
+    const usdAmountElement = document.getElementById("amount2") as HTMLInputElement
+    aptAmountElement.value = "0"
+    usdAmountElement.value = "0"
     
     if (event.target.value === "APT") {
       setIsSellingApt(true)
@@ -105,11 +111,16 @@ export default function OfferCard(
 
     const provider = new Provider(Network.DEVNET);
 
+    if (!arbiter || !aptAmount || !usdAmount || isSellingApt === undefined) {
+      console.log("Missing fields")
+      return
+    }
+
     const payload: Types.TransactionPayload = {
       type: "entry_function_payload",
       function: "0x389af99d6f67670471ca5f0a8e868e562c1af20317189f8eabf5d538f162101f::peer_trading::create_offer", // change addr
       type_arguments: [],
-      arguments: [arbiter, aptAmount, usdAmount, isSellingApt], // 1 is in Octas
+      arguments: [arbiter, aptAmount * 100000000, usdAmount, isSellingApt], // 1 is in Octas
     };
     try {
       const response = await signAndSubmitTransaction(payload);
@@ -145,7 +156,7 @@ export default function OfferCard(
           <span className="btn btn-success join-item">Offer</span>
           <div>
             <div>
-              <input className="input input-bordered join-item" disabled={isSellingApt == undefined} placeholder="00" onChange={(event) => handleAmountChange(event, 0)}/>
+              <input className="input input-bordered join-item" id="amount1" disabled={isSellingApt == undefined} placeholder="00" onChange={(event) => handleAmountChange(event, 0)}/>
             </div>
           </div>
           <select className="select select-bordered join-item" onChange={(event) => handleUnitSelect(event)}>
@@ -159,7 +170,7 @@ export default function OfferCard(
           <span className="btn btn-warning join-item">Request</span>
           <div>
             <div>
-              <input className="input input-bordered join-item" disabled={isSellingApt == undefined} placeholder="00" onChange={(event) => handleAmountChange(event, 1)}/>
+              <input className="input input-bordered join-item" id="amount2" disabled={isSellingApt == undefined} placeholder="00" onChange={(event) => handleAmountChange(event, 1)}/>
             </div>
           </div>
           <span className="btn join-item">{isSellingApt == undefined ? "select unit" : isSellingApt ? "USD" : "APT"}</span>

@@ -4,13 +4,14 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 export default function OfferCard(
   props: {
-    id: number,
+    id: string,
     creator: string, 
     arbiter: string, 
     aptAmount: number, 
     usdAmount: number, 
     counterParty?: string, 
-    isCompleted: boolean, 
+    isCompletedByCreator: boolean, 
+    isCompletedByCounterParty: boolean,
     hasDisputeOpened: boolean,
     isSellingApt: boolean, 
   }
@@ -37,7 +38,7 @@ export default function OfferCard(
 
     const payload: Types.TransactionPayload = {
       type: "entry_function_payload",
-      function: "0x1::peer_trading::accept_offer", // change addr
+      function: "0x389af99d6f67670471ca5f0a8e868e562c1af20317189f8eabf5d538f162101f::peer_trading::accept_offer", // change addr
       type_arguments: [],
       arguments: [props.id], // 1 is in Octas
     };
@@ -46,6 +47,7 @@ export default function OfferCard(
       // if you want to wait for transaction
       await provider.waitForTransaction(response?.hash || "");
       console.log(response?.hash)
+      window.location.reload();
     } catch (error: any) {
       console.log("error", error);
     }
@@ -55,9 +57,10 @@ export default function OfferCard(
     <div className="card card-compact w-fit h-fit bg-base-200 shadow-xl">
       <div className="card-body">
         <div className="card-actions justify-end">
-          {props.isCompleted && <div className="badge badge-info">Completed</div>}
+          {props.isCompletedByCreator && <div className="badge badge-info">Completed By Creator</div>}
+          {props.isCompletedByCounterParty && <div className="badge badge-info">Completed By Counter Party</div>}
           {props.counterParty && <div className="badge badge-success">Accepted</div>}
-          {!props.counterParty && !props.isCompleted && <div className="badge badge-warning">Open</div>}
+          {!props.counterParty && <div className="badge badge-warning">Open</div>}
           {props.hasDisputeOpened && <div className="badge badge-error">Disputed</div>}
         </div>
         <ExchangeCard
