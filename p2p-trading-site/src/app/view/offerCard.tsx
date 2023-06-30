@@ -53,7 +53,7 @@ export default function OfferCard(
   }
 
   return (
-    <div className="card card-compact w-fit h-fit bg-base-200 shadow-xl">
+    <div className="card card-compact w-full h-fit bg-base-200 shadow-xl">
       <div className="card-body">
         <div className="card-actions justify-end">
           {props.isCompletedByCreator && <div className="badge badge-info">Completed By Creator</div>}
@@ -62,11 +62,13 @@ export default function OfferCard(
           {!props.counterParty && <div className="badge badge-warning">Open</div>}
           {props.hasDisputeOpened && <div className="badge badge-error">Disputed</div>}
         </div>
-        <ExchangeCard
-          aptAmount={props.aptAmount}
-          usdAmount={props.usdAmount}
-          isSellingApt={props.isSellingApt}
-        />
+        <div className="flex justify-center">
+          <ExchangeCard
+            aptAmount={props.aptAmount}
+            usdAmount={props.usdAmount}
+            isSellingApt={props.isSellingApt}
+          />
+        </div>
         <button 
           className="btn btn-primary" 
           disabled={props.counterParty !== undefined}

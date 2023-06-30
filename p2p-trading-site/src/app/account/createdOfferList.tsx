@@ -80,7 +80,7 @@ export default function CreatedOfferList() {
 
 
 
-      setOffers(offerCards)
+      setOffers(offerCards.reverse())
 
       } catch (error) {
         console.log(error)
@@ -89,33 +89,36 @@ export default function CreatedOfferList() {
 
   return (
     <div className="text-center">
-      <h1 className="text-3xl font-bold m-2">Your created Offers</h1>
+      <h1 className="text-3xl font-bold m-2 text-secondary">Your created Offers</h1>
       {
         offers.length === 0 &&
         <p className="text-xl">You have no created offers</p>
       }
-      <div className="carousel carousel-vertical carousel-center h-96 p-4 bg-neutral rounded-box items-center">
-        {
-          offers.map((offer) => {
-            return (
-              <div className="carousel-item m-2">
-                <CreatorOfferCard
-                  id={offer.id}
-                  creator={offer.creator}
-                  arbiter={offer.arbiter}
-                  aptAmount={offer.aptAmount}
-                  usdAmount={offer.usdAmount}
-                  counterParty={offer.counterParty}
-                  isCompletedByCreator={offer.isCompletedByCreator}
-                  isCompletedByCounterParty={offer.isCompletedByCounterParty}
-                  hasDisputeOpened={offer.hasDisputeOpened}
-                  isSellingApt={offer.isSellingApt}
-                />
-              </div>
-            )
-          })
-        }
-      </div>
+      {
+        offers.length > 0 &&
+        <div className="carousel carousel-vertical carousel-center h-96 p-4 bg-neutral rounded-box items-center">
+          {
+            offers.map((offer) => {
+              return (
+                <div className="carousel-item m-2">
+                  <CreatorOfferCard
+                    id={offer.id}
+                    creator={offer.creator}
+                    arbiter={offer.arbiter}
+                    aptAmount={offer.aptAmount}
+                    usdAmount={offer.usdAmount}
+                    counterParty={offer.counterParty}
+                    isCompletedByCreator={offer.isCompletedByCreator}
+                    isCompletedByCounterParty={offer.isCompletedByCounterParty}
+                    hasDisputeOpened={offer.hasDisputeOpened}
+                    isSellingApt={offer.isSellingApt}
+                  />
+                </div>
+              )
+            })
+          }
+        </div>
+      }
     </div>
   )
 }

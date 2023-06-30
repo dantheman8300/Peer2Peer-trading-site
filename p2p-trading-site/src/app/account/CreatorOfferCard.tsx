@@ -116,21 +116,21 @@ export default function CreatorOfferCard(
           <div className="join">
             <button 
               className="btn btn-success join-item" 
-              disabled={props.counterParty !== undefined}
+              disabled={props.counterParty === undefined || props.isCompletedByCreator}
               onClick={() => handleOfferComplete()}
             >
               Complete
             </button>
             <button 
               className="btn btn-warning join-item" 
-              disabled={props.counterParty !== undefined}
+              disabled={props.counterParty === undefined || props.hasDisputeOpened}
               onClick={() => handleOfferDispute()}
             >
               Dispute
             </button>
             <button 
               className="btn btn-error join-item" 
-              disabled={props.counterParty !== undefined}
+              disabled={props.counterParty !== undefined || props.hasDisputeOpened}
               onClick={() => handleOfferCancel()}
             >
               Cancel

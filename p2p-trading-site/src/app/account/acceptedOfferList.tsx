@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 import OfferCard from "./CreatorOfferCard"
 import { Network, Provider } from "aptos"
 import { useWallet } from "@aptos-labs/wallet-adapter-react"
-import ArbiterOfferCard from "./ArbiterOfferCard"
+import AcceptedOfferCard from "./AcceptedOfferCard"
 
-export default function ArbiterOfferList() {
+export default function CreatorOfferList() {
 
   const {
     connect,
@@ -22,7 +22,7 @@ export default function ArbiterOfferList() {
   useEffect(() => {
     getOffers()
   
-  }, [account])
+  }, [account, connected])
 
   const getOffers = async () => {
     const provider = new Provider(Network.DEVNET);
@@ -49,7 +49,7 @@ export default function ArbiterOfferList() {
       // console.log('offers', offers)
 
       let offerCards = (offers[0] as any).data.map((offer: any) => {
-        // console.log('offer', offer)
+        console.log('offer', offer)
         const offerObject = offer.value
         const offerId = offer.key
 
@@ -60,7 +60,7 @@ export default function ArbiterOfferList() {
         const isSellingApt = offerObject.sell_apt
         const offerCounterParty = offerObject.counterparty.vec[0]
         const isCompletedByCreator = offerObject.completion.creator
-        const isCompletedByCounterParty = offerObject.completion.counter_party
+        const isCompletedByCounterParty = offerObject.completion.counterparty
         const isDisputeOpened = offerObject.dispute_opened
 
         return {
@@ -78,11 +78,14 @@ export default function ArbiterOfferList() {
 
       })
 
+      
       offerCards = offerCards.filter((offer: any) => {
-        return offer.arbiter === account.address
+        return offer.counterParty && offer.counterParty === account.address
       })
 
-      setOffers(offerCards)
+      console.log('offerCards', offerCards)
+
+      setOffers(offerCards.reverse())
 
       } catch (error) {
         console.log(error)
@@ -91,33 +94,37 @@ export default function ArbiterOfferList() {
 
   return (
     <div className="text-center">
-      <h1 className="text-3xl font-bold m-2">Your arbiter offers</h1>
+      <h1 className="text-3xl font-bold m-2 text-secondary">Your accepted Offers</h1>
       {
         offers.length === 0 &&
-        <p className="text-xl">You are not an arbiter for any offers</p>
+        <p className="text-xl">You have no accepted offers</p>
       }
-      <div className="carousel carousel-vertical carousel-center h-96 p-4 items-center bg-neutral rounded-box">
-        {
-          offers.map((offer) => {
-            return (
-              <div className="carousel-item m-2">
-                <ArbiterOfferCard
-                  id={offer.id}
-                  creator={offer.creator}
-                  arbiter={offer.arbiter}
-                  aptAmount={offer.aptAmount}
-                  usdAmount={offer.usdAmount}
-                  counterParty={offer.counterParty}
-                  isCompletedByCreator={offer.isCompletedByCreator}
-                  isCompletedByCounterParty={offer.isCompletedByCounterParty}
-                  hasDisputeOpened={offer.hasDisputeOpened}
-                  isSellingApt={offer.isSellingApt}
-                />
-              </div>
-            )
-          })
-        }
-      </div>
+      {
+        offers.length > 0 &&
+        <div className="carousel carousel-vertical carousel-center h-96 p-4 items-center bg-neutral rounded-box">
+          {
+            offers.map((offer) => {
+              return (
+                <div className="carousel-item m-2">
+                  <AcceptedOfferCard
+                    id={offer.id}
+                    creator={offer.creator}
+                    arbiter={offer.arbiter}
+                    aptAmount={offer.aptAmount}
+                    usdAmount={offer.usdAmount}
+                    counterParty={offer.counterParty}
+                    isCompletedByCreator={offer.isCompletedByCreator}
+                    isCompletedByCounterParty={offer.isCompletedByCounterParty}
+                    hasDisputeOpened={offer.hasDisputeOpened}
+                    isSellingApt={offer.isSellingApt}
+                  />
+                </div>
+              )
+            })
+          }
+        </div>
+      }
+      
     </div>
   )
 }

@@ -19,7 +19,7 @@ export default function page() {
   } = useWallet();
 
   return (
-    <div className="flex flex-col overflow-x-hidden">
+    <div className="flex flex-col overflow-x-hidden min-h-screen bg-base-300">
       <Header
         title="Aptos P2P Trading"
         useWallet={true}

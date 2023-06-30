@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 import OfferCard from "./CreatorOfferCard"
 import { Network, Provider } from "aptos"
 import { useWallet } from "@aptos-labs/wallet-adapter-react"
-import AcceptedOfferCard from "./AcceptedOfferCard"
+import ArbiterOfferCard from "./ArbiterOfferCard"
 
-export default function CreatorOfferList() {
+export default function ArbiterOfferList() {
 
   const {
     connect,
@@ -49,7 +49,7 @@ export default function CreatorOfferList() {
       // console.log('offers', offers)
 
       let offerCards = (offers[0] as any).data.map((offer: any) => {
-        console.log('offer', offer)
+        // console.log('offer', offer)
         const offerObject = offer.value
         const offerId = offer.key
 
@@ -78,13 +78,11 @@ export default function CreatorOfferList() {
 
       })
 
-
-
       offerCards = offerCards.filter((offer: any) => {
-        return offer.counterParty && offer.counterParty === account.address
+        return offer.arbiter === account.address
       })
 
-      setOffers(offerCards)
+      setOffers(offerCards.reverse())
 
       } catch (error) {
         console.log(error)
@@ -93,17 +91,20 @@ export default function CreatorOfferList() {
 
   return (
     <div className="text-center">
-      <h1 className="text-3xl font-bold m-2">Your accepted Offers</h1>
+      <h1 className="text-3xl font-bold m-2 text-secondary">Your arbiter offers</h1>
       {
         offers.length === 0 &&
-        <p className="text-xl">You have no accepted offers</p>
+        <p className="text-xl">You are not an arbiter for any offers</p>
       }
-      <div className="carousel carousel-vertical carousel-center h-96 p-4 items-center bg-neutral rounded-box">
+      {
+        offers.length > 0 &&
+        <div className="carousel carousel-vertical carousel-center h-96 p-4 items-center bg-neutral rounded-box">
         {
+
           offers.map((offer) => {
             return (
               <div className="carousel-item m-2">
-                <AcceptedOfferCard
+                <ArbiterOfferCard
                   id={offer.id}
                   creator={offer.creator}
                   arbiter={offer.arbiter}
@@ -119,7 +120,8 @@ export default function CreatorOfferList() {
             )
           })
         }
-      </div>
+        </div>
+      }
     </div>
   )
 }

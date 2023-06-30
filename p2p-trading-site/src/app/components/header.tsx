@@ -31,7 +31,7 @@ export default function Header(
           <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 z-40">
             <li key="homepage"><a href="/" >Homepage</a></li>
             <li key="view"><a href="/view" >View</a></li>
-            <li key="create"><a href="/create" >Create</a></li>
+            <li key="account"><a href="/account" >Account</a></li>
           </ul>
         </div>
       </div>

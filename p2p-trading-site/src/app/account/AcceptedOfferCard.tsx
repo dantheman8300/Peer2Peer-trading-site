@@ -116,14 +116,12 @@ export default function AcceptedOfferCard(
           <div className="join">
             <button 
               className="btn btn-success join-item" 
-              disabled={props.counterParty !== undefined}
               onClick={() => handleOfferComplete()}
             >
               Complete
             </button>
             <button 
               className="btn btn-warning join-item" 
-              disabled={props.counterParty !== undefined}
               onClick={() => handleOfferDispute()}
             >
               Dispute

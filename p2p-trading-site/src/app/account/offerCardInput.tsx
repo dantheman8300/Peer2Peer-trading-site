@@ -6,7 +6,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import ExchangeCard from "./exchangeCard";
 import { useState } from "react";
 
-export default function OfferCard(
+export default function OfferCardInput(
   props: {
     // id: number,
     // creator: string, 
@@ -176,10 +176,10 @@ export default function OfferCard(
 
         <button 
           className="btn btn-primary" 
-          disabled={isSellingApt == undefined || aptAmount == undefined || usdAmount == undefined || arbiter == undefined}
+          disabled={isSellingApt == undefined || aptAmount == undefined || usdAmount == undefined || arbiter == undefined || !connected}
           onClick={() => handleOfferSubmit()}
         >
-          Submit
+          {connected ? "Submit" : "Connect wallet to submit"}
         </button>
       </div>
     </div>

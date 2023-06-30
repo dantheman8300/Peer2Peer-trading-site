@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Header from "../components/header";
 import OfferGrid from "./offerGrid";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import ViewHero from "./viewHero";
 
 
 export default function page() {
@@ -24,7 +23,7 @@ export default function page() {
   } = useWallet();
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-base-300">
       <Header
         title="Aptos P2P Trading"
         useWallet={true}
@@ -34,22 +33,9 @@ export default function page() {
         connected={connected}
         disconnect={disconnect}
       />
-      <div className="">
-        <ViewHero 
-          setAcceptOnly={setAcceptOnly}
-          acceptOnly={acceptOnly}
-          setOfferingApt={setOfferingApt}
-          offeringApt={offeringApt}
-          setOfferingUsd={setOfferingUsd}
-          offeringUsd={offeringUsd}
-        />
-        <OfferGrid 
-          acceptOnly={acceptOnly}
-          offeringAptOnly={offeringApt}
-          offeringUsdOnly={offeringUsd}
-        />
+      <div className="grow">
+        <OfferGrid />
       </div>
-      
     </div>
   )
 }

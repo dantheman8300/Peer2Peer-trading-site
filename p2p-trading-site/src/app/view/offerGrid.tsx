@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import OfferCard from "./offerCard"
 import { Network, Provider } from "aptos"
+import { useWallet } from "@aptos-labs/wallet-adapter-react"
 
 const initialOffers: any[] | (() => any[]) = [
   // {
@@ -60,20 +61,23 @@ const initialOffers: any[] | (() => any[]) = [
   // },
 ]
 
-export default function OfferGrid(
-  props: {
-    acceptOnly?: boolean,
-    offeringAptOnly?: boolean,
-    offeringUsdOnly?: boolean,
-  }
-) {
+export default function OfferGrid() {
+
+  const {
+    connect,
+    connected,
+    disconnect,
+    account,
+    wallets,
+    signAndSubmitTransaction,
+  } = useWallet();
 
   const [offers, setOffers] = useState<any[]>([])
 
   useEffect(() => {
     getOffers()
   
-  }, [])
+  }, [account, connected])
 
   const getOffers = async () => {
     const provider = new Provider(Network.DEVNET);
@@ -89,7 +93,7 @@ export default function OfferGrid(
 
       // console.log('offers', offers)
 
-      const offerCards = (offers[0] as any).data.map((offer: any) => {
+      let offerCards = (offers[0] as any).data.map((offer: any) => {
         // console.log('offer', offer)
         const offerObject = offer.value
         const offerId = offer.key
@@ -119,9 +123,18 @@ export default function OfferGrid(
 
       })
 
+      if (connected && account != null) {
+        console.log('account', account)
+        offerCards = offerCards.filter((offer: any) => {
+          return offer.creator !== account.address && offer.counterParty === undefined
+        })
+      } else {
+        offerCards = offerCards.filter((offer: any) => {
+          return offer.counterParty === undefined
+        })  
+      }
 
-
-      setOffers(offerCards)
+      setOffers(offerCards.reverse())
 
       } catch (error) {
         console.log(error)
@@ -129,22 +142,32 @@ export default function OfferGrid(
   }
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
+    <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center m-10">
+      {
+        offers.length === 0 &&
+        <div className="card card-compact bg-base-200">
+          <div className="card-body">
+            <p className="text-center">No offers available</p>
+          </div>
+        </div>
+      }
       {
         offers.map((offer) => {
           return (
-            <OfferCard
-              id={offer.id}
-              creator={offer.creator}
-              arbiter={offer.arbiter}
-              aptAmount={offer.aptAmount}
-              usdAmount={offer.usdAmount}
-              counterParty={offer.counterParty}
-              isCompletedByCreator={offer.isCompletedByCreator}
-              isCompletedByCounterParty={offer.isCompletedByCounterParty}
-              hasDisputeOpened={offer.hasDisputeOpened}
-              isSellingApt={offer.isSellingApt}
-            />
+            <div className="w-full">
+              <OfferCard
+                id={offer.id}
+                creator={offer.creator}
+                arbiter={offer.arbiter}
+                aptAmount={offer.aptAmount}
+                usdAmount={offer.usdAmount}
+                counterParty={offer.counterParty}
+                isCompletedByCreator={offer.isCompletedByCreator}
+                isCompletedByCounterParty={offer.isCompletedByCounterParty}
+                hasDisputeOpened={offer.hasDisputeOpened}
+                isSellingApt={offer.isSellingApt}
+              />
+            </div>
           )
         })
       }
