@@ -127,6 +127,7 @@ export default function OfferCard(
       // if you want to wait for transaction
       await provider.waitForTransaction(response?.hash || "");
       console.log(response?.hash)
+      window.location.reload()
     } catch (error: any) {
       console.log("error", error);
     }
@@ -135,13 +136,10 @@ export default function OfferCard(
   return (
     <div className="card card-compact w-fit h-fit bg-base-200 shadow-xl">
       <div className="card-body">
-        <div className="card-actions justify-end">
-          {/* {props.isCompleted && <div className="badge badge-info">Completed</div>}
-          {props.counterParty && <div className="badge badge-success">Accepted</div>}
-          {!props.counterParty && !props.isCompleted && <div className="badge badge-warning">Open</div>}
-          {props.hasDisputeOpened && <div className="badge badge-error">Disputed</div>} */}
-          <div className="badge badge-info">New offer</div>
-        </div>
+
+        <h1 className="card-title">
+          Create new offer
+        </h1>
 
         <div className="join">
           <span className="btn btn-info join-item">Arbiter</span>

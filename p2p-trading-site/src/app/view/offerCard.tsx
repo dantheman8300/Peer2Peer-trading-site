@@ -47,7 +47,6 @@ export default function OfferCard(
       // if you want to wait for transaction
       await provider.waitForTransaction(response?.hash || "");
       console.log(response?.hash)
-      window.location.reload();
     } catch (error: any) {
       console.log("error", error);
     }

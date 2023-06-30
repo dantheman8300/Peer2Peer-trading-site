@@ -19,7 +19,7 @@ export default function page() {
   } = useWallet();
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="flex flex-col overflow-x-hidden">
       <Header
         title="Aptos P2P Trading"
         useWallet={true}
@@ -29,7 +29,7 @@ export default function page() {
         connected={connected}
         disconnect={disconnect}
       />
-      <div className="">
+      <div className="m-2">
         <CreateSection />
       </div>
       

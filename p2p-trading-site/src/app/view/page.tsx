@@ -4,9 +4,15 @@ import { useEffect, useState } from "react";
 import Header from "../components/header";
 import OfferGrid from "./offerGrid";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import ViewHero from "./viewHero";
 
 
 export default function page() {
+
+  const [acceptOnly, setAcceptOnly] = useState(false);
+  const [offeringApt, setOfferingApt] = useState(false);
+  const [offeringUsd, setOfferingUsd] = useState(false);
+
 
   const {
     connect,
@@ -29,7 +35,19 @@ export default function page() {
         disconnect={disconnect}
       />
       <div className="">
-        <OfferGrid />
+        <ViewHero 
+          setAcceptOnly={setAcceptOnly}
+          acceptOnly={acceptOnly}
+          setOfferingApt={setOfferingApt}
+          offeringApt={offeringApt}
+          setOfferingUsd={setOfferingUsd}
+          offeringUsd={offeringUsd}
+        />
+        <OfferGrid 
+          acceptOnly={acceptOnly}
+          offeringAptOnly={offeringApt}
+          offeringUsdOnly={offeringUsd}
+        />
       </div>
       
     </div>

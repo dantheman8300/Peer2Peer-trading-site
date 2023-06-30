@@ -60,7 +60,13 @@ const initialOffers: any[] | (() => any[]) = [
   // },
 ]
 
-export default function OfferGrid() {
+export default function OfferGrid(
+  props: {
+    acceptOnly?: boolean,
+    offeringAptOnly?: boolean,
+    offeringUsdOnly?: boolean,
+  }
+) {
 
   const [offers, setOffers] = useState<any[]>([])
 
@@ -112,6 +118,8 @@ export default function OfferGrid() {
         }
 
       })
+
+
 
       setOffers(offerCards)
 
