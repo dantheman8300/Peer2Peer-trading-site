@@ -1,4 +1,6 @@
+import { Network, Provider, Types } from "aptos";
 import ExchangeCard from "./exchangeCard";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 export default function OfferCard(
   props: {
@@ -14,8 +16,39 @@ export default function OfferCard(
   }
 ) {
 
-  const handleOfferAccept = () => {
+  const {
+    connect,
+    account,
+    network,
+    connected,
+    disconnect,
+    wallet,
+    wallets,
+    signAndSubmitTransaction,
+    signTransaction,
+    signMessage,
+    signMessageAndVerify,
+  } = useWallet();
+
+  const handleOfferAccept = async () => {
     console.log("Offer accepted", props.id)
+
+    const provider = new Provider(Network.DEVNET);
+
+    const payload: Types.TransactionPayload = {
+      type: "entry_function_payload",
+      function: "0x1::peer_trading::accept_offer", // change addr
+      type_arguments: [],
+      arguments: [props.id], // 1 is in Octas
+    };
+    try {
+      const response = await signAndSubmitTransaction(payload);
+      // if you want to wait for transaction
+      await provider.waitForTransaction(response?.hash || "");
+      console.log(response?.hash)
+    } catch (error: any) {
+      console.log("error", error);
+    }
   }
 
   return (
